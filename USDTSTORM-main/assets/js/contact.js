@@ -26,27 +26,39 @@
             if ( name && email && message ) {
                  $.ajax({
                      type: "POST",
-                     url:'../../contact.php',
+                     url:'contact.php',
                      data:{
                          'name': name,
                          'email': email,
                          'message': message,
                      },
+                     dataType: 'json',
                      success:function(data){
+                         var success = data && data.success;
+                         var messageText = (data && data.message) ? data.message : 'Thanks for reaching out.';
                          $('#contact_form_submit').children('.email-success').remove();
-                         $('#contact_form_submit').prepend('<span class="alert alert-success email-success contact-alert">'+data+'</span>');
-                         $('#contact-name').val('');
-                         $('#contact-email').val('');
-                         $('#contact-message').val('');
-                         $('#contact-map').height('576px');
+                         var alertClass = success ? 'alert-success' : 'alert-danger';
+                         $('#contact_form_submit').prepend('<span class="alert '+alertClass+' email-success contact-alert">'+messageText+'</span>');
+                         if(success){
+                             $('#contact_name').val('');
+                             $('#contact_email').val('');
+                             $('#contact_message').val('');
+                         }
                          $('.email-success').fadeOut(3000);
                      },
                      error:function(res){
+                        $('#contact_form_submit').children('.email-success').remove();
+                        var errorMessage = 'Something went wrong';
+                        if(res && res.responseJSON && res.responseJSON.message){
+                            errorMessage = res.responseJSON.message;
+                        }
+                        $('#contact_form_submit').prepend('<span class="alert alert-danger email-success contact-alert">'+errorMessage+'</span>');
+                        $('.email-success').fadeOut(3000);
                      }
                  });
              }else{
                 $('#contact_form_submit').children('.email-success').remove();
-                $('#contact_form_submit').prepend('<span class="alert alert-danger email-success contact-alert">Somenthing went wrong</span>');
+                $('#contact_form_submit').prepend('<span class="alert alert-danger email-success contact-alert">Please fill in all required fields.</span>');
                 $('.email-success').fadeOut(3000);
              }
         });

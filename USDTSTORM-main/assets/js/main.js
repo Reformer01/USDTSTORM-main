@@ -343,23 +343,32 @@ $('.privacy__tab__menu li a').on('click', function() {
 // JavaScript for the popup
 
 // Get the overlay and popup elements
-const overlay = document.getElementById('overlay');
+const overlayElement = document.getElementById('overlay') || document.querySelector('.overlay');
 const popup = document.getElementById('popup');
 
 // Function to display the popup and overlay
 function showPopup() {
-  overlay.style.display = 'block';
+  if (!overlayElement || !popup) {
+    return;
+  }
+  overlayElement.style.display = 'block';
   popup.style.display = 'block';
 }
 
 // Function to close the popup and overlay
 function closePopup() {
-  overlay.style.display = 'none';
+  if (!overlayElement || !popup) {
+    return;
+  }
+  overlayElement.style.display = 'none';
   popup.style.display = 'none';
 }
 
 // Check if the popup has been shown before using localStorage
 document.addEventListener('DOMContentLoaded', function() {
+  if (!popup || !overlayElement) {
+    return;
+  }
   if (!localStorage.getItem('popupShown')) {
     // Show the popup if it hasn't been shown before
     showPopup();
@@ -372,7 +381,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function googleTranslateElementInit() {
   new google.translate.TranslateElement(
     {
-      pageLanguage: "ar",
+      pageLanguage: "en",
       autoDisplay: "true",
       layout: google.translate.TranslateElement.InlineLayout.HORIZONTAL,
     },

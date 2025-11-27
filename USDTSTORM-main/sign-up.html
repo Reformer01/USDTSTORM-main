@@ -439,9 +439,10 @@
     <script>
 
 const ref = new URLSearchParams(window.location.search).get("ref")
+const referralInput = document.getElementById("referralCode")
 
-if(ref) {
-  document.getElementById("referralCode").value = ref
+if (ref && referralInput) {
+  referralInput.value = ref
 }
 
       document
@@ -461,7 +462,7 @@ if(ref) {
             dob: formData.get("dateOfBirth"),
             country: formData.get("countryOfResidence"),
             address: formData.get("address"),
-            refCode: formData.get("referralCode"),
+            refCode: referralInput ? formData.get("referralCode") : null,
           };
 
           registerUser(registerPayload)
